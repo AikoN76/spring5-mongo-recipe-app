@@ -31,7 +31,7 @@ public class IngredientServiceImplTest {
     @Mock
     UnitOfMeasureRepository unitOfMeasureRepository;
 
-    IngredientService ingredientService;
+    private IngredientService ingredientService;
 
     //init converters
     public IngredientServiceImplTest() {
@@ -40,7 +40,7 @@ public class IngredientServiceImplTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, ingredientCommandToIngredient,
@@ -48,23 +48,26 @@ public class IngredientServiceImplTest {
     }
 
     @Test
-    public void findByRecipeIdAndId() throws Exception {
+    public void findByRecipeIdAndId()  {
     }
 
     @Test
-    public void findByRecipeIdAndReceipeIdHappyPath() throws Exception {
+    public void findByRecipeIdAndReceipeIdHappyPath()  {
         //given
         Recipe recipe = new Recipe();
         recipe.setId("1");
 
         Ingredient ingredient1 = new Ingredient();
         ingredient1.setId("1");
+        ingredient1.setRecipe(recipe);
 
         Ingredient ingredient2 = new Ingredient();
         ingredient2.setId("1");
+        ingredient2.setRecipe(recipe);
 
         Ingredient ingredient3 = new Ingredient();
         ingredient3.setId("3");
+        ingredient3.setRecipe(recipe);
 
         recipe.addIngredient(ingredient1);
         recipe.addIngredient(ingredient2);
@@ -84,7 +87,7 @@ public class IngredientServiceImplTest {
 
 
     @Test
-    public void testSaveRecipeCommand() throws Exception {
+    public void testSaveRecipeCommand() {
         //given
         IngredientCommand command = new IngredientCommand();
         command.setId("3");
@@ -110,13 +113,13 @@ public class IngredientServiceImplTest {
     }
 
     @Test
-    public void testDeleteById() throws Exception {
+    public void testDeleteById() {
         //given
         Recipe recipe = new Recipe();
         Ingredient ingredient = new Ingredient();
         ingredient.setId("3");
         recipe.addIngredient(ingredient);
-        ingredient.setRecipe(recipe);
+        //ingredient.setRecipe(recipe);
         Optional<Recipe> recipeOptional = Optional.of(recipe);
 
         when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);

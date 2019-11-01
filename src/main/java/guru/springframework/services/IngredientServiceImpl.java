@@ -36,26 +36,27 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public IngredientCommand findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
-
+        IngredientCommand ingredientCommand = null;
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
-
         if (!recipeOptional.isPresent()){
             //todo impl error handling
             log.error("recipe id not found. Id: " + recipeId);
+        } else {
+
+            Recipe recipe = recipeOptional.get();
+
+            Optional<IngredientCommand> ingredientCommandOptional = recipe.getIngredients().stream()
+                    .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                    .map(ingredientToIngredientCommand::convert).findFirst();
+
+            if (!ingredientCommandOptional.isPresent()) {
+                //todo impl error handling
+                log.error("Ingredient id not found: " + ingredientId);
+            } else {
+                ingredientCommand = ingredientCommandOptional.get();
+            }
         }
-
-        Recipe recipe = recipeOptional.get();
-
-        Optional<IngredientCommand> ingredientCommandOptional = recipe.getIngredients().stream()
-                .filter(ingredient -> ingredient.getId().equals(ingredientId))
-                .map( ingredient -> ingredientToIngredientCommand.convert(ingredient)).findFirst();
-
-        if(!ingredientCommandOptional.isPresent()){
-            //todo impl error handling
-            log.error("Ingredient id not found: " + ingredientId);
-        }
-
-        return ingredientCommandOptional.get();
+        return ingredientCommand;
     }
 
     @Override
@@ -132,7 +133,7 @@ public class IngredientServiceImpl implements IngredientService {
 
             if(ingredientOptional.isPresent()){
                 log.debug("found Ingredient");
-                Ingredient ingredientToDelete = ingredientOptional.get();
+                //Ingredient ingredientToDelete = ingredientOptional.get();
                // ingredientToDelete.setRecipe(null);
                 recipe.getIngredients().remove(ingredientOptional.get());
                 recipeRepository.save(recipe);
