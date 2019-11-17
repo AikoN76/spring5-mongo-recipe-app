@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public class IngredientCommand {
-    private String id = UUID.randomUUID().toString();
+    private String id;
     private String recipeId;
     private String description;
     private BigDecimal amount;
