@@ -1,6 +1,7 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.domain.Recipe;
 import guru.springframework.services.ImageService;
 import guru.springframework.services.RecipeService;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
 import static org.junit.Assert.assertEquals;
@@ -63,6 +65,8 @@ public class ImageControllerTest {
         MockMultipartFile multipartFile =
                 new MockMultipartFile("imagefile", "testing.txt", "text/plain",
                         "Spring Framework Guru".getBytes());
+
+        when(imageService.saveImageFile(anyString(), any())).thenReturn(Mono.empty());
 
         mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
                 .andExpect(status().is3xxRedirection())
