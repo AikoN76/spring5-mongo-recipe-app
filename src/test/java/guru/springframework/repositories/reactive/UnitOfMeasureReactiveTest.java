@@ -38,7 +38,7 @@ public class UnitOfMeasureReactiveTest {
         UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
         unitOfMeasure.setDescription(EACH);
         unitOfMeasureReactiveRepository.save(unitOfMeasure).block();
-        UnitOfMeasure unitOfMeasureFetched = (UnitOfMeasure) unitOfMeasureReactiveRepository.findByDescription(EACH).block();
+        UnitOfMeasure unitOfMeasureFetched = unitOfMeasureReactiveRepository.findByDescription(EACH).block();
         assertEquals(EACH, unitOfMeasureFetched.getDescription());
 
     }
